@@ -2,9 +2,9 @@ name: workout-tracking-BE CI
 
 on:
   push:
-    branches: [ "master", "uat", "dev" ]
+    branches: ['master', 'uat', 'dev']
   pull_request:
-    branches: [ "master", "uat", "dev" ]
+    branches: ['master', 'uat', 'dev']
 
 jobs:
   build:
@@ -13,29 +13,29 @@ jobs:
     strategy:
       matrix:
         node-version: [20.x]
-        test-type: ["unit-test", "api-test"]
+        test-type: ['unit-test', 'api-test']
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
 
-    - name: Install Dependencies
-      run: |
-        npm install
-        
-    # only run setup if it's api-test
-    - name: Setup for API Test
-      if: matrix.test-type == 'api-test'
-      run: npm run setup
+      - name: Install Dependencies
+        run: |
+          npm install
 
-    - name: Run ${{ matrix.test-type }}
-      run: |
-        npm run ${{ matrix.test-type }}
+      # only run setup if it's api-test
+      - name: Setup for API Test
+        if: matrix.test-type == 'api-test'
+        run: npm run setup-server-linux
 
-    - name: Clean up
-      run: |
-        npm run clean
+      - name: Run ${{ matrix.test-type }}
+        run: |
+          npm run ${{ matrix.test-type }}
+
+      - name: Clean up
+        run: |
+          npm run clean

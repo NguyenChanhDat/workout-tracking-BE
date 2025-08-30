@@ -108,8 +108,7 @@ export class UserController implements IUserController {
         res.send(UserApiStatus.UNPROCESSABLE_ENTITY);
         return;
       }
-      res.status(UserApiStatus.OK.status);
-      res.send(JSON.stringify(token));
+      res.status(UserApiStatus.OK.status).json(token);
     } catch (error) {
       res.status(UserApiStatus.UNPROCESSABLE_ENTITY.status);
       res.send(UserApiStatus.UNPROCESSABLE_ENTITY);

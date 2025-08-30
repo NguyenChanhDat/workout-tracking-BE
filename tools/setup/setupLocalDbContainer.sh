@@ -10,8 +10,6 @@ h1() {
   echo -e "${BG_BLUE}${FG_WHITE}${BOLD} [$(date +"%H:%M:%S")] ${MSG} ${RS}"
 }
 
-npm install
-
 h1 "Kill Old Container"
 docker kill fb-db-local || true
 

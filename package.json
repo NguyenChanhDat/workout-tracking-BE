@@ -1,16 +1,16 @@
 {
   "name": "workout-tracking-be",
   "scripts": {
-    "dev-linux": "rm -rf dist && npm run build && node dist/src/index.js",
-    "dev-win": "powershell Remove-Item dist -Recurse -Force && npm run build && node dist/src/index.js",
+    "dev-linux": "rm -rf dist && npm run build && nohup node dist/src/index.js >/dev/null 2>&1 &",
+    "dev-win": "npm run build && powershell Start-Process node -ArgumentList 'dist/src/index.js'",
     "setup-linux": "chmod +x tools/setup/setupLocalDbContainer.sh &&  npm run db-local-linux && npm run restore-seed-db-linux",
     "setup-win": "npm run db-local-win && npm run restore-seed-db-win",
     "db-local-linux": "sh ./tools/setup/setupLocalDbContainer.sh",
     "db-local-win": "powershell ./tools/setup/setupLocalDbContainer.ps1",
     "restore-seed-db-linux": "rm -rf dist && npm run build && node dist/src/infra/databases/setup/execute.js",
     "restore-seed-db-win": "powershell Remove-Item dist -Recurse -Force && npm run build && node dist/src/infra/databases/setup/execute.js",
-    "deploy-linux": "npm run setup-linux && sh ./tools/run/localApi.sh",
-    "deploy-win": "npm run setup-win && powershell ./tools/run/localApi.ps1",
+    "setup-server-linux": "npm run setup-linux && sh ./tools/run/localApi.sh",
+    "setup-server-win": "npm run setup-win && powershell ./tools/run/localApi.ps1",
     "unit-test-linux": "rm -rf dist && npm run build && jest --config jest.config.unit.js",
     "unit-test-win": "powershell Remove-Item dist -Recurse -Force && npm run build && jest --config jest.config.unit.js",
     "api-test-linux": "rm -rf dist && npm run build && jest --config jest.config.api.js",
@@ -23,12 +23,13 @@
     "api-test": "node scripts/run-api-tests.js",
     "dev": "node scripts/run-dev.js",
     "setup": "node scripts/run-setup.js",
-    "gen-type": "powershell ./tools/setup/genModel.ps1 && powershell ./tools/setup/renameGenModel.ps1", 
+    "gen-type": "powershell ./tools/setup/genModel.ps1 && powershell ./tools/setup/renameGenModel.ps1",
     "clean": "sh ./tools/clean/clean.sh"
   },
   "author": "Dat NguyenChanh",
   "license": "ISC",
   "dependencies": {
+    "@types/supertest": "^6.0.3",
     "bcryptjs": "^2.4.3",
     "concurrently": "^9.1.2",
     "cors": "^2.8.5",
@@ -38,6 +39,7 @@
     "jest": "^29.7.0",
     "mssql": "^10.0.4",
     "reflect-metadata": "^0.2.2",
+    "supertest": "^7.1.4",
     "ts-node": "^10.9.2",
     "typeorm": "^0.3.20",
     "typescript": "^5.7.2"
