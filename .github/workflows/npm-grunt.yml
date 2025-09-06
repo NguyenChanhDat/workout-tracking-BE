@@ -13,6 +13,8 @@ jobs:
         node-version: [20.x]
         test-type: ['unit-test', 'api-test']
 
+    environment: ${{ github.base_ref == 'master' && 'prod' || github.base_ref == 'uat' && 'uat' || 'dev' }}
+
     steps:
       - uses: actions/checkout@v4
 
@@ -24,11 +26,17 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-
-      # only run setup if it's api-test
-      - name: Setup for API Test
-        if: matrix.test-type == 'api-test'
-        run: npm run setup
+      - name: Create .env file from secrets
+        run: |
+          echo "TOKEN_SECRET=${{ secrets.TOKEN_SECRET }}" >> .env
+          echo "SALT_ROUNDS=${{ secrets.SALT_ROUNDS }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "DB_USER=${{ secrets.DB_USER }}" >> .env
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+          echo "DB_SERVER=${{ secrets.DB_SERVER }}" >> .env
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> .env
+          echo "DB_DATABASE=${{ secrets.DB_DATABASE }}" >> .env
+          echo "AI_REVIEW_PORT=${{ secrets.AI_REVIEW_PORT }}" >> .env
 
       - name: Run ${{ matrix.test-type }}
         run: |
